@@ -11,7 +11,7 @@ const OrdersSchema = mongoose.Schema({
         required: true
     },
     purchase_date: {
-        type: Date,
+        type: String,
         required: true
     },
     customer: {

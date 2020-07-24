@@ -13,23 +13,18 @@ router.get('/',  async (req, res) => {
     try {
         
 
-        var orders = await Order.find().sort({
+        const orders = await Order.find().sort({
             purchase_date: -1
         });
 
          //let result = orders.map(order => {
         orders.forEach(order => {
-            //let isoDateStr = order.purchase_date.toISOString();
-            //isoDateStr = isoDateStr.substring(0, isoDateStr.indexOf('T'));
+            
             var formatted_date = date_convert( new Date(order.purchase_date) );
-            console.log("obj is: ", formatted_date  );
-             //order.qty *= 2;
-            // order.product_name = '  aaaaaaaa';
-            order.hey = 'hhhh';
-            order.purchase_date += 'asdf';
-            console.log("pd is: ", order.purchase_date );
-            //return order;
-            //return isoDateStr;
+            //console.log("obj is: ", formatted_date  );
+            order.purchase_date = formatted_date;
+            //console.log("pd is: ", order.purchase_date );
+            
         }); 
         res.json(orders);
         //res.json(orders);
@@ -91,6 +86,63 @@ router.post(
         }
     }
 );
+
+
+
+// @route     PUT api/orders/:id
+// @desc      post an order to update it with id
+// @access    Private
+router.put('/:id',  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+        return res.status(400).json({ errors: errors.array() });
+
+    const { product_name, price, purchase_date, customer, qty } = req.body;
+
+    // Build orders object
+    const orderFields = {};
+    if (product_name) orderFields.product_name = product_name;
+    if (price) orderFields.price = price;
+    if (purchase_date) orderFields.purchase_date = purchase_date;
+    if (customer) orderFields.customer = customer;
+    if (qty) orderFields.qty = qty;
+
+    try {
+        let order = await Order.findById(req.params.id);
+
+        if (!order) return res.status(404).json({ msg: 'Order not found' });
+
+        order = await Order.findByIdAndUpdate(
+            req.params.id,
+            { $set: orderFields },
+            { new: true }
+        );
+
+        res.json(order);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+
+// @route    DELETE api/orders/:id
+// @desc     Delete an order
+// @access   Private
+router.delete('/:id',  async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (!order) return res.status(404).json({ msg: 'order not found' });
+
+        await Order.findByIdAndRemove(req.params.id);
+
+        res.json({ msg: 'Order removed' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
 
 
 
