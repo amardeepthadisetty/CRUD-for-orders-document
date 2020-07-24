@@ -71,20 +71,20 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, email, phone, type } = req.body;
+        const { product_name, price, purchase_date, customer, qty } = req.body;
 
         try {
-            const newContact = new Contact({
-                name,
+            const newOrder = new Order({
+                product_name,
                 email,
                 phone,
                 type,
                 user: req.user.id
             });
 
-            const contact = await newContact.save();
+            const order = await newOrder.save();
 
-            res.json(contact);
+            res.json(order);
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server Error');
