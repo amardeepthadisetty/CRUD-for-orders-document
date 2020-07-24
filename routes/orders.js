@@ -76,10 +76,10 @@ router.post(
         try {
             const newOrder = new Order({
                 product_name,
-                email,
-                phone,
-                type,
-                user: req.user.id
+                price,
+                purchase_date,
+                customer,
+                qty: qty
             });
 
             const order = await newOrder.save();
