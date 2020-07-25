@@ -14,18 +14,18 @@ router.get('/',  async (req, res) => {
         
 
         const orders = await Order.find().sort({
-            purchase_date: -1
+            product_name: -1
         });
 
          //let result = orders.map(order => {
-        orders.forEach(order => {
+        /* orders.forEach(order => {
             
-            var formatted_date = date_convert( new Date(order.purchase_date) );
+            //var formatted_date = date_convert( new Date(order.purchase_date) );
             //console.log("obj is: ", formatted_date  );
-            order.purchase_date = formatted_date;
+            //order.purchase_date = formatted_date;
             //console.log("pd is: ", order.purchase_date );
             
-        }); 
+        });  */
         res.json(orders);
         //res.json(orders);
     } catch (err) {
@@ -80,6 +80,55 @@ router.post(
             const order = await newOrder.save();
 
             res.json(order);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    }
+);
+
+function randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// @route     POST api/orders/random
+// @desc      post an order
+// @access    Private
+router.get('/random',  async (req, res) => {
+
+    try{
+        let dates = ["21/07/2020","22/07/2020","23/07/2020","24/07/2020","25/07/2020"];
+        let quantity_array = ["1","2","3","4","5"];
+        for (let index = 100; index < 500; index++) {
+            var product_name = "Product " + index + " ";
+            var price = randomInteger(20, 500);
+            var dates_index = randomInteger(0, 4);
+            var purchase_date = dates[dates_index];
+            var qty = quantity_array[dates_index];
+            var customer = 'Raju';
+            if (index %2 ==0) {
+                customer = 'Amar';
+            }
+
+            const newOrder = new Order({
+                product_name,
+                price,
+                purchase_date,
+                customer,
+                qty
+            });
+
+            const order = await newOrder.save();
+
+
+            //const product_name = "Product "+index+" ";
+            console.log("this is order " , order);
+            //console.log("this is price "+price);
+            
+        }
+        res.send("this is random");
+
+        
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server Error');
