@@ -2,41 +2,64 @@ import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 import React from 'react';
 import './App.css';
+import 'devextreme/data/odata/store';
+import DataGrid, { Column } from 'devextreme-react/data-grid';
 
-import Chart, {
-  ArgumentAxis,
-  Series,
-  Legend
-} from 'devextreme-react/chart';
-
-
-import Button from 'devextreme-react/button';
-
-const data = [{
-  arg: 1990,
-  val: 5320816667
-}, {
-  arg: 2000,
-  val: 6127700428
-}, {
-  arg: 2010,
-  val: 6916183482
-}];
+const dataSourceOptions = {
+  store: {
+    type: 'odata',
+    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products'
+  },
+  select: [
+    'Product_ID',
+    'Product_Name',
+    'Product_Cost',
+    'Product_Sale_Price',
+    'Product_Retail_Price',
+    'Product_Current_Inventory'
+  ],
+  filter: ['Product_Current_Inventory', '>', 0]
+};
 
 class App extends React.Component {
   render() {
     return (
       <div class="container">
-
-        <Chart dataSource={data}>
-          <ArgumentAxis tickInterval={10} />
-          <Series type="bar" />
-          <Legend visible={false} />
-        </Chart>
+        <DataGrid
+          dataSource={dataSourceOptions}
+          showBorders={true}
+        >
+          <Column dataField="Product_ID" />
+          <Column
+            dataField="Product_Name"
+            width={250}
+          />
+          <Column
+            dataField="Product_Cost"
+            caption="Cost"
+            dataType="number"
+            format="currency"
+          />
+          <Column
+            dataField="Product_Sale_Price"
+            caption="Sale Price"
+            dataType="number"
+            format="currency"
+          />
+          <Column
+            dataField="Product_Retail_Price"
+            caption="Retail Price"
+            dataType="number"
+            format="currency"
+          />
+          <Column
+            dataField="Product_Current_Inventory"
+            caption="Inventory"
+          />
+        </DataGrid>
 
       </div>
-      
-    );
+      );
   }
 }
 
