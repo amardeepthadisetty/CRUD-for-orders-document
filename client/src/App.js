@@ -3,7 +3,7 @@ import 'devextreme/dist/css/dx.light.css';
 import React from 'react';
 import './App.css';
 import 'devextreme/data/odata/store';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Pager, Paging } from 'devextreme-react/data-grid';
 
 const dataSourceOptions = {
   store: {
@@ -20,7 +20,16 @@ class App extends React.Component {
           dataSource={dataSourceOptions}
           showBorders={true}
         >
-          
+          <Paging defaultPageSize={10} />
+          <Pager
+            showPageSizeSelector={true}
+            allowedPageSizes={[5, 10, 20]}
+            showInfo={true} />
+
+          <Column
+            dataField="_id"
+            width={250}
+          />
           <Column
             dataField="product_name"
             width={250}
