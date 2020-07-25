@@ -35,5 +35,6 @@
   },
   "devDependencies": {
     "devextreme-themebuilder": "20.1-stable"
-  }
+  },
+  "proxy": "http://localhost:4000"
 }
