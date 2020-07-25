@@ -8,17 +8,8 @@ import DataGrid, { Column } from 'devextreme-react/data-grid';
 const dataSourceOptions = {
   store: {
     type: 'odata',
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products'
-  },
-  select: [
-    'Product_ID',
-    'Product_Name',
-    'Product_Cost',
-    'Product_Sale_Price',
-    'Product_Retail_Price',
-    'Product_Current_Inventory'
-  ],
-  filter: ['Product_Current_Inventory', '>', 0]
+    url: 'http://localhost:5000/api/orders'
+  }
 };
 
 class App extends React.Component {
@@ -29,32 +20,26 @@ class App extends React.Component {
           dataSource={dataSourceOptions}
           showBorders={true}
         >
-          <Column dataField="Product_ID" />
+          
           <Column
-            dataField="Product_Name"
+            dataField="product_name"
             width={250}
           />
           <Column
-            dataField="Product_Cost"
+            dataField="price"
             caption="Cost"
             dataType="number"
             format="currency"
           />
+          <Column dataField="purchase_date" />
+          <Column dataField="customer" />
+
+
+          
           <Column
-            dataField="Product_Sale_Price"
-            caption="Sale Price"
+            dataField="qty"
+            caption="Quantity"
             dataType="number"
-            format="currency"
-          />
-          <Column
-            dataField="Product_Retail_Price"
-            caption="Retail Price"
-            dataType="number"
-            format="currency"
-          />
-          <Column
-            dataField="Product_Current_Inventory"
-            caption="Inventory"
           />
         </DataGrid>
 

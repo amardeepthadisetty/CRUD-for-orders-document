@@ -14,7 +14,7 @@ router.get('/',  async (req, res) => {
         
 
         const orders = await Order.find().sort({
-            product_name: -1
+            product_name: 1
         });
 
          //let result = orders.map(order => {
@@ -26,7 +26,7 @@ router.get('/',  async (req, res) => {
             //console.log("pd is: ", order.purchase_date );
             
         });  */
-        res.json(orders);
+        res.json({data : orders, totalCount: orders.length});
         //res.json(orders);
     } catch (err) {
         console.error(err.message);
