@@ -61,15 +61,17 @@ router.post(
         ]
     ],
     async (req, res) => {
-        const errors = validationResult(req);
+        const errors = validationResult( JSON.parse(req.body.values) );
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { product_name, price, purchase_date, customer, qty } = req.body;
+        const { product_name, price, purchase_date, customer, qty } = JSON.parse(req.body.values);
 
         try {
-            const newOrder = new Order({
+
+            //res.send({ 'product_name': product_name, 'values': JSON.parse(req.body.values) });
+             const newOrder = new Order({
                 product_name,
                 price,
                 purchase_date,
@@ -79,7 +81,7 @@ router.post(
 
             const order = await newOrder.save();
 
-            res.json(order);
+            res.json(order); 
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server Error');
@@ -141,12 +143,12 @@ router.get('/random',  async (req, res) => {
 // @route     PUT api/orders/:id
 // @desc      post an order to update it with id
 // @access    Private
-router.put('/:id',  async (req, res) => {
-    const errors = validationResult(req);
+router.put('/',  async (req, res) => {
+    /* const errors = validationResult(req);
     if (!errors.isEmpty())
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() }); */
 
-    const { product_name, price, purchase_date, customer, qty } = req.body;
+    const { product_name, price, purchase_date, customer, qty } = JSON.parse( req.body.values );
 
     // Build orders object
     const orderFields = {};
@@ -157,17 +159,23 @@ router.put('/:id',  async (req, res) => {
     if (qty) orderFields.qty = qty;
 
     try {
-        let order = await Order.findById(req.params.id);
+        //req.body.key = JSON.parse(req.body.key);
+        let _idd = req.body.key.replace(/(^"|"$)/g, '');
+        //console.log(" id is: ", _idd);
+        //res.json({ 'key': _idd, "orderfields": orderFields, "value prd": JSON.parse(req.body.values) });
+         
+        //let order = await Order.findById(req.params.id);
+        let order = await Order.findById(_idd);
 
         if (!order) return res.status(404).json({ msg: 'Order not found' });
 
         order = await Order.findByIdAndUpdate(
-            req.params.id,
+            _idd,
             { $set: orderFields },
             { new: true }
         );
 
-        res.json(order);
+        res.json(order);  
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -178,13 +186,14 @@ router.put('/:id',  async (req, res) => {
 // @route    DELETE api/orders/:id
 // @desc     Delete an order
 // @access   Private
-router.delete('/:id',  async (req, res) => {
+router.delete('/',  async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id);
+        let _idd = req.body.key.replace(/(^"|"$)/g, '');
+        const order = await Order.findById(_idd);
 
         if (!order) return res.status(404).json({ msg: 'order not found' });
 
-        await Order.findByIdAndRemove(req.params.id);
+        await Order.findByIdAndRemove(_idd);
 
         res.json({ msg: 'Order removed' });
     } catch (err) {

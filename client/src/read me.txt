@@ -1,0 +1,15 @@
+
+If you want to load the data, you can find the "orders" collection in "database_files" in current directory, 
+if you are not interested to import data, just ignore the above line.
+
+The front end application is in "client" folder and the back end REST API is in current directry.
+
+To run the application, run the following command
+npm install
+npm run dev //This coommand will run both the node server and the react application.
+
+REST end point is accessed by:
+http://localhost:5000/api/orders
+
+Front end is accessed by : 
+http://localhost:3000

@@ -1,0 +1,14 @@
+Mongodump command used in my local system
+--------------------------------------------------------
+ ./mongodump -d dev_extreme -o c:/exportdatabasefiles2/ 
+
+ 
+
+
+ 
+Import command used in server 1.6
+------------------------------------------
+C:\Program Files\MongoDB\Server\3.6\bin>mongorestore -h localhost -d dev_extreme
+e .\database_files\exportdev_extreme
+
+
